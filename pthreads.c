@@ -15,9 +15,6 @@ void* simpleThread(void* threadIndex) {
 	int* indexPointer = (int *)threadIndex;
 	int which = *indexPointer;	
 
-
-	printf("This function happens with thread %d \n", which);
-
 	for (num = 0; num < 20; num++) {
 	
 		if (random() > RAND_MAX/2){
@@ -54,31 +51,31 @@ bool validateArgument(char* argument) {
 }
 
 int main(int argc, char* argv[]) {
-
+        
 	int numberOfThreads = 0;
 
 	if (argc > 1) {
 		if (validateArgument(argv[1])) {
                		numberOfThreads = atoi(argv[1]);
         	}
-
 	}
-
-	printf("Number of threads: %d\n", numberOfThreads);
 	
 	int i;
 	int createFailure;
 	pthread_t threads[numberOfThreads];
 
-
 	int indeces[numberOfThreads];
 
+	/*
+ 		This loop simply creates an array of integers from 0 to n where n is the number of threads.
+		I'm using this array of integers to identify each thread. I pass this integer to the "simpleThread"
+		method later on when I create each of the threads with pthread_create.
+ 	*/ 	
 	for (i = 0; i < numberOfThreads; i++) {
 		indeces[i] = i;
 	} 
 
-	for (i = 0; i < numberOfThreads; i++) {
-		
+	for (i = 0; i < numberOfThreads; i++) {		
 		createFailure = pthread_create(&threads[i], NULL, &simpleThread, &indeces[i]); 
 		if (createFailure) { printf("Thread %d not created successfully\n", i);}
 		else { printf("Thread %d created successfully\n", i);}
