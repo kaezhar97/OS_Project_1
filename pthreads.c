@@ -7,6 +7,8 @@
 #include <pthread.h>
 
 int sharedVariable = 0;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_barrier_t barrier;
 
 void* simpleThread(void* threadIndex) {
 
@@ -21,14 +23,28 @@ void* simpleThread(void* threadIndex) {
 			usleep(500);
 		}
 
+		
+		#ifdef PTHREAD_SYNC
+		pthread_mutex_lock(&mutex);	
+		#endif
+		
 
 		val = sharedVariable;
 		printf("***thread %d sees value %d\n", which, val);
 		sharedVariable = val + 1;
 
+		
+		#ifdef PTHREAD_SYNC
+		pthread_mutex_unlock(&mutex);		
+		#endif
+		
 	}
 
+
+	pthread_barrier_wait(&barrier);
+	
 	val = sharedVariable;
+  		
 	printf("Thread %d sees final value %d\n", which, val);
 	pthread_exit(NULL);
 }
@@ -46,8 +62,7 @@ bool validateArgument(char* argument) {
 		}
 		i++;
 	}
-	return true;
-	
+	return true;	
 }
 
 int main(int argc, char* argv[]) {
@@ -65,6 +80,17 @@ int main(int argc, char* argv[]) {
 	pthread_t threads[numberOfThreads];
 
 	int indeces[numberOfThreads];
+	
+	if (pthread_barrier_init(&barrier, NULL, numberOfThreads)){
+		printf("Barrier not created\n");
+		return 1;
+	}
+
+	if (pthread_mutex_init(&mutex, NULL)) {
+		printf("Mutex not created\n");
+		return 1;
+	}
+
 
 	/*
  		This loop simply creates an array of integers from 0 to n where n is the number of threads.
@@ -77,13 +103,16 @@ int main(int argc, char* argv[]) {
 
 	for (i = 0; i < numberOfThreads; i++) {		
 		createFailure = pthread_create(&threads[i], NULL, &simpleThread, &indeces[i]); 
-		if (createFailure) { printf("Thread %d not created successfully\n", i);}
+		if (createFailure) { printf("Thread %d not created successfully\n", i); return 1;}
 		else { printf("Thread %d created successfully\n", i);}
 	}
 	
 	for (i = 0; i < numberOfThreads; i++) {
 		pthread_join(threads[i], NULL);
 	}
+
+	pthread_mutex_destroy(&mutex);	
+	pthread_barrier_destroy(&barrier);
 
 	return 0;
 }
