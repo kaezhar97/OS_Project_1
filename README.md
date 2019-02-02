@@ -16,3 +16,4 @@ How to execute:
 4. Type the number of threads you wish to use
 5. Press Enter
 
+Note: The maximum recorded number of threads with which the program has worked correctly is 4879. Better computers might be able to run more threads than that
