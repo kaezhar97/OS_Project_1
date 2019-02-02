@@ -10,7 +10,8 @@ Names:
 How to execute:
 
 1. Go to project directory
-2. Type "make" at the command line to compile
+2. Type "make unsync" or simply "make" at the command line to compile unsynchronized threads version of the code.
+   Type "make sync" at the command line to compile synchronized threads version of the code
 3. Type "./" then press tab
 4. Type the number of threads you wish to use
 5. Press Enter
