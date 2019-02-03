@@ -5,3 +5,6 @@ unsync: pthreads.o
 sync: pthreads.o
 	gcc -Wall -g -c pthreads.c -lpthread -DPTHREAD_SYNC=1
 	gcc -Wall -g pthreads.o -o pthreads -lpthread
+
+clean:
+	rm -f pthreads.o pthreads

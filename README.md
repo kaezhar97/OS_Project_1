@@ -15,5 +15,6 @@ How to execute:
 3. Type "./" then press tab
 4. Type the number of threads you wish to use
 5. Press Enter
+6. Type "make clean" to delete the binary and the executable files
 
 Note: The maximum recorded number of threads with which the program has worked correctly is 4879. Better computers might be able to run more threads than that
