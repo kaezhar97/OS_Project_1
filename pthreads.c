@@ -97,10 +97,12 @@ int main(int argc, char* argv[]) {
                		numberOfThreads = atoi(argv[1]);
         	}
 		else {
+			printf("Please enter an integer for the number of threads argument\n");
 			return 1;
 		}
 	}
 	else {
+		printf("Please enter an integer for the number of threads argument\n");
 		return 1;
 	}
 	
@@ -138,7 +140,6 @@ int main(int argc, char* argv[]) {
 	for (i = 0; i < numberOfThreads; i++) {		
 		createFailure = pthread_create(&threads[i], NULL, &simpleThread, &indeces[i]); 
 		if (createFailure) { printf("Thread %d not created successfully\n", i); return 1;}
-		else { printf("Thread %d created successfully\n", i);}
 	}
 	
 	/*
